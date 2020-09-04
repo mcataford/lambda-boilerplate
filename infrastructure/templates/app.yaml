@@ -3,6 +3,8 @@ Parameters:
     ArtifactsBucketName:
         Type: String
         Description: Bucket storing the function source.
+    SourceKey:
+        Type: String
 Resources:
     # Lambda function
     Function:
@@ -10,7 +12,7 @@ Resources:
         Properties:
             Code:
                 S3Bucket: !Ref ArtifactsBucketName
-                S3Key: lambda_function.zip
+                S3Key: !Ref SourceKey
             FunctionName: sampleFunction
             Handler: src.base.handler
             Role: !GetAtt LambdaExecutionRole.Arn
@@ -85,3 +87,9 @@ Resources:
         DependsOn: PostMethod
         Properties:
             RestApiId: !Ref RestApi
+
+Outputs:
+    ApiGatewayId:
+        Value: !Ref RestApi
+        Export:
+            Name: RestApiId

@@ -1,0 +1,3 @@
+template_path: bootstrap.yaml
+parameters:
+    ArtifactsBucketName: mcat-dev-test-bucket-artifacts-2

@@ -1,25 +1,8 @@
 from invoke import task, Collection
+import boto3
 import os
-
-ARTIFACTS_BUCKET_NAME = os.environ["ARTIFACTS_BUCKET"]
-STACK_NAME = os.environ["STACK_NAME"]
-
-###############
-# Stack utils #
-###############
-
-
-def _package_source(ctx):
-    ctx.run("zip lambda_function.zip src/*")
-
-
-def _create_artifacts_bucket(ctx):
-    ctx.run(f"aws s3api create-bucket --acl private --bucket {ARTIFACTS_BUCKET_NAME}")
-
-
-def _upload_source_to_s3(ctx):
-    ctx.run(f"aws s3 cp lambda_function.zip s3://{ARTIFACTS_BUCKET_NAME}")
-
+from pathlib import Path
+import hashlib
 
 #####################
 # Stack invocations #
@@ -28,22 +11,27 @@ def _upload_source_to_s3(ctx):
 
 @task(name="deploy")
 def stack_deploy(ctx):
-    _package_source(ctx)
-    _create_artifacts_bucket(ctx)
-    _upload_source_to_s3(ctx)
-    ctx.run(
-        f"aws cloudformation deploy --template-file application.yml --stack-name {STACK_NAME} --parameter-overrides ArtifactsBucketName={ARTIFACTS_BUCKET_NAME} --capabilities CAPABILITY_IAM"
-    )
+    path = Path(__file__).parent
+    with ctx.cd("infrastructure"):
+        ctx.run("sceptre launch bootstrap/bootstrap.yaml -y")
+
+    # Move to hooks?
+    ctx.run("zip lambda_function.zip src/*")
+    with open("lambda_function.zip", "rb") as src:
+        srchash = hashlib.md5(src.read()).hexdigest()
+        new_archive_name = f"lambda_function_{srchash}.zip"
+        ctx.run(f"mv lambda_function.zip {new_archive_name}")
+
+    ctx.run(f"aws s3 cp {new_archive_name} s3://mcat-dev-test-bucket-artifacts-2")
+
+    with ctx.cd("infrastructure"):
+        ctx.run(f"sceptre --var source_key={new_archive_name} launch app/app.yaml -y")
 
 
-@task(name="update-function")
-def stack_update_function(ctx, function_name):
-    _package_source(ctx)
-    _create_artifacts_bucket(ctx)
-    _upload_source_to_s3(ctx)
-    ctx.run(
-        f"aws lambda update-function-code --function-name {function_name} --s3-bucket {ARTIFACTS_BUCKET_NAME} --s3-key lambda_function.zip"
-    )
+@task(name="deploy-api")
+def test(ctx):
+    v = stack_manager.get_stack_exports()
+    stack_manager.deploy_api_gateway(gateway_id=v["RestApiId"])
 
 
 #####################
@@ -80,7 +68,6 @@ ns = Collection()
 
 stack = Collection("stack")
 stack.add_task(stack_deploy)
-stack.add_task(stack_update_function)
 
 # App invocations manage local containers
 

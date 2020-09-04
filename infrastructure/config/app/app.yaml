@@ -1,0 +1,4 @@
+template_path: app.yaml
+parameters:
+    ArtifactsBucketName: !stack_output bootstrap/bootstrap.yaml::ArtifactsBucketNameTest
+    SourceKey: {{ var.source_key | default("") }}
