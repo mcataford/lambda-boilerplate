@@ -1,0 +1,22 @@
+name: Lambda Boilerplate
+
+on: [push]
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+          sudo apt install python3-venv
+          python3 -m pip install --upgrade pip setuptools wheel pipx
+    - name: Validate templates
+      run: |
+          cd infrastructure
+          python3 -m pipx run sceptre validate app/app.yaml
+          python3 -m pipx run sceptre validate bootstrap/bootstrap.yaml
+      env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+    - name: Lint
+      run: python3 -m pipx run black . --check
