@@ -1,4 +1,8 @@
 template_path: app.yaml
 parameters:
+    # Lambda source artifacts bucket name
     ArtifactsBucketName: !stack_output bootstrap/bootstrap.yaml::ArtifactsBucketNameTest
+    # Lambda zip key
     SourceKey: {{ var.source_key | default("") }}
+    ApiStageName: "v0"
+

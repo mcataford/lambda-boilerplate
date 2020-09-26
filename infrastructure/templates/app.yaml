@@ -5,6 +5,8 @@ Parameters:
         Description: Bucket storing the function source.
     SourceKey:
         Type: String
+    ApiStageName:
+        Type: String
 Resources:
     # Lambda function
     Function:
@@ -63,6 +65,8 @@ Resources:
             ParentId: !GetAtt RestApi.RootResourceId
             PathPart: lambda
             RestApiId: !Ref RestApi
+    # This template only defines a POST method, but others can easily be defined
+    # by duping this resource and tweaking it for other resources, opnames or URIs.
     PostMethod:
         Type: AWS::ApiGateway::Method
         Properties:
@@ -81,7 +85,7 @@ Resources:
         Properties:
             DeploymentId: !Ref ApiDeployment
             RestApiId: !Ref RestApi
-            StageName: 'v0'
+            StageName: !Ref ApiStageName
     ApiDeployment:
         Type: AWS::ApiGateway::Deployment
         DependsOn: PostMethod
