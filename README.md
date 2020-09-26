@@ -1,6 +1,8 @@
 # lambda-boilerplate
 🛠 Skip the boilerplate and start building fun λ things 🛠
 
+![Lambda Boilerplate](https://github.com/mcataford/lambda-boilerplate/workflows/Lambda%20Boilerplate/badge.svg)
+
 ## Overview
 
 AWS Lambdas are fun, but often the amount of boilerplate involved in getting a project off the ground hinders the fun. From setting up a local environment to writing out a Cloudformation template, the overhead of Lambda-based greenfield projects can be daunting. No more. Just use this repository as a template or clone it and jump straight into the action! This repository offers a quick template your can use, full with a Docker setup for local development and invocation commands that you can use to package and deploy small Lambdas.
