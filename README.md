@@ -14,6 +14,7 @@ To get started, hit the bootstrap script with `. script/bootstrap`. This will se
 The base Lambda handler is at `src/base.py` and all the infrastructure templates and Sceptre configuration are in `infrastructure`.
 
 [Read more about Sceptre](https://sceptre.cloudreach.com/latest/index.html)
+
 [Read more about AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python.html)
 
 ### Invocations
