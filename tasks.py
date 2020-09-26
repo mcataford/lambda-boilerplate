@@ -21,14 +21,13 @@ def stack_deploy(ctx):
     with ctx.cd("infrastructure"):
         ctx.run("sceptre launch bootstrap/bootstrap.yaml -y")
 
-    # Move to hooks?
     ctx.run("zip lambda_function.zip src/*")
     with open("lambda_function.zip", "rb") as src:
         srchash = hashlib.md5(src.read()).hexdigest()
         new_archive_name = f"lambda_function_{srchash}.zip"
         ctx.run(f"mv lambda_function.zip {new_archive_name}")
 
-    ctx.run(f"aws s3 cp {new_archive_name} s3://mcat-dev-test-bucket-artifacts-2")
+    ctx.run(f"aws s3 cp {new_archive_name} s3://mcat-dev-test-bucket-artifacts-2 && rm {new_archive_name}")
 
     with ctx.cd("infrastructure"):
         ctx.run(f"sceptre --var source_key={new_archive_name} launch app/app.yaml -y")
