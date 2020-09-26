@@ -16,6 +16,6 @@ jobs:
         default: "3.8"
         command: pip install -U pip
     - name: Install dependencies
-      run: . script/bootstrap
+      run: pip install -r requirements_dev.txt
     - name: Validate templates
       run: (cd infrastructure && sceptre validate app/app.yaml && sceptre validate bootstrap/bootstrap.yaml)
