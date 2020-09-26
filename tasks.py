@@ -14,6 +14,12 @@ def teardown_app(ctx):
     with ctx.cd("infrastructure"):
         ctx.run("sceptre delete app/app.yaml -y")
 
+@task(name="teardown-bootstrap")
+def teardown_bootstrap(ctx):
+    with ctx.cd("infrastructure"):
+        ctx.run("sceptre delete bootstrap/bootstrap.yaml -y")
+
+
 
 @task(name="deploy")
 def stack_deploy(ctx):
@@ -68,6 +74,7 @@ ns = Collection()
 stack = Collection("stack")
 stack.add_task(stack_deploy)
 stack.add_task(teardown_app)
+stack.add_task(teardown_bootstrap)
 
 # App invocations manage local containers
 
