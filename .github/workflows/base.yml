@@ -2,8 +2,7 @@ name: Lambda Boilerplate
 
 on: [push]
 jobs:
-  build:
-
+  lint-and-validate:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
