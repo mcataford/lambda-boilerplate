@@ -1,0 +1,4 @@
+*.sw*
+*.pyc
+*.zip
+*_out.json

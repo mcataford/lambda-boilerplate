@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+    ArtifactsBucketName:
+        Type: String
+        Description: Bucket storing the function source
+Resources:
+    DevBucket:
+        Type: AWS::S3::Bucket
+        Properties:
+            BucketName: !Ref ArtifactsBucketName
+            AccessControl: Private
+            VersioningConfiguration:
+                Status: Enabled
+Outputs:
+    ArtifactsBucketNameTest:
+        Value: !Ref ArtifactsBucketName
+        Export:
+            Name: ArtifactsBucketNameTest
