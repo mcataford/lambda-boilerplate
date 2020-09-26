@@ -24,6 +24,7 @@ This template uses PyInvoke, all commands are of the format `inv <command> <para
 |---|---|
 |`app.start`|Start your Lambda in Docker.|
 |`app.stop`|Stop and remove the container.|
+|`app.invoke-function <function name> <Serialized JSON payload>`|Invokes the given local Lambda by container name|
 |`stack.deploy`|Packages your code and deploys the stack|
 |`stack.teardown-app`|Tears down the application stack|
 |`stack.teardown-bootstrap`|Tears down the bootstrap stack| 
