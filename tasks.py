@@ -9,6 +9,12 @@ import hashlib
 #####################
 
 
+@task(name="teardown-app")
+def teardown_app(ctx):
+    with ctx.cd("infrastructure"):
+        ctx.run("sceptre delete app/app.yaml -y")
+
+
 @task(name="deploy")
 def stack_deploy(ctx):
     path = Path(__file__).parent
@@ -26,12 +32,6 @@ def stack_deploy(ctx):
 
     with ctx.cd("infrastructure"):
         ctx.run(f"sceptre --var source_key={new_archive_name} launch app/app.yaml -y")
-
-
-@task(name="deploy-api")
-def test(ctx):
-    v = stack_manager.get_stack_exports()
-    stack_manager.deploy_api_gateway(gateway_id=v["RestApiId"])
 
 
 #####################
@@ -68,6 +68,7 @@ ns = Collection()
 
 stack = Collection("stack")
 stack.add_task(stack_deploy)
+stack.add_task(teardown_app)
 
 # App invocations manage local containers
 
