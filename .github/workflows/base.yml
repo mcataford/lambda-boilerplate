@@ -11,6 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
-      run: pip3 install -r dev_requirements.txt
+      run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install -r dev_requirements.txt
     - name: Validate templates
       run: (cd infrastructure && sceptre validate app/app.yaml && sceptre validate bootstrap/bootstrap.yaml)
