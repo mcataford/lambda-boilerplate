@@ -14,11 +14,11 @@ def teardown_app(ctx):
     with ctx.cd("infrastructure"):
         ctx.run("sceptre delete app/app.yaml -y")
 
+
 @task(name="teardown-bootstrap")
 def teardown_bootstrap(ctx):
     with ctx.cd("infrastructure"):
         ctx.run("sceptre delete bootstrap/bootstrap.yaml -y")
-
 
 
 @task(name="deploy")
@@ -33,7 +33,9 @@ def stack_deploy(ctx):
         new_archive_name = f"lambda_function_{srchash}.zip"
         ctx.run(f"mv lambda_function.zip {new_archive_name}")
 
-    ctx.run(f"aws s3 cp {new_archive_name} s3://mcat-dev-test-bucket-artifacts-2 && rm {new_archive_name}")
+    ctx.run(
+        f"aws s3 cp {new_archive_name} s3://mcat-dev-test-bucket-artifacts-2 && rm {new_archive_name}"
+    )
 
     with ctx.cd("infrastructure"):
         ctx.run(f"sceptre --var source_key={new_archive_name} launch app/app.yaml -y")
