@@ -13,7 +13,7 @@ jobs:
     - name: Setup Python
       uses: gabrielfalcao/pyenv-action@v5
       with:
-        default: "3.8"
+        default: "3.8.2"
         command: pip install -U pip
     - name: Install dependencies
       run: pip install -r dev_requirements.txt
