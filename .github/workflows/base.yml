@@ -11,11 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup Python
-      uses: gabrielfalcao/pyenv-action@v5
-      with:
-        default: "3.8.2"
-        command: pip install -U pip
     - name: Install dependencies
-      run: pip install -r dev_requirements.txt
+      run: pip3 install -r dev_requirements.txt
     - name: Validate templates
       run: (cd infrastructure && sceptre validate app/app.yaml && sceptre validate bootstrap/bootstrap.yaml)
