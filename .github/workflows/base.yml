@@ -12,8 +12,8 @@ jobs:
     - name: Validate templates
       run: |
           cd infrastructure
-          pipx run sceptre validate app/app.yaml
-          pipx run sceptre validate bootstrap/bootstrap.yaml
+          python3 -m pipx run sceptre validate app/app.yaml
+          python3 -m pipx run sceptre validate bootstrap/bootstrap.yaml
       env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
