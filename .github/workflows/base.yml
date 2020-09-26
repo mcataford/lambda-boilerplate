@@ -15,4 +15,4 @@ jobs:
           python3 -m pip install --upgrade pip setuptools wheel
           python3 -m pip install -r dev_requirements.txt
     - name: Validate templates
-      run: (cd infrastructure && sceptre validate app/app.yaml && sceptre validate bootstrap/bootstrap.yaml)
+      run: cd infrastructure && sceptre validate app/app.yaml && sceptre validate bootstrap/bootstrap.yaml
