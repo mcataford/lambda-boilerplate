@@ -7,8 +7,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
-      run: |
-          sudo apt install python3-venv
-          python3 -m pip install --upgrade pip setuptools wheel pipx
+      run: CI=1 . script/bootstrap
     - name: Lint
-      run: python3 -m pipx run black . --check
+      run: inv lint
