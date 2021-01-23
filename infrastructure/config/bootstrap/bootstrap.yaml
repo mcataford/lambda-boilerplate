@@ -1,4 +1,0 @@
-template_path: bootstrap.yaml
-parameters:
-    # Bucket name for the artifacts S# bucket. Used solely to store versioned lambda zips.
-    ArtifactsBucketName: my-cool-bucket-name

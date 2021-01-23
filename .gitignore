@@ -2,3 +2,7 @@
 *.pyc
 *.zip
 *_out.json
+*.terraform*
+*tfstate*
+*tfvars
+
