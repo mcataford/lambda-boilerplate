@@ -9,7 +9,3 @@ variable "artifacts_bucket_name" {
 variable "lambda_archive_name" {
     type        = string
 }
-
-variable "configs_bucket_name" {
-    type        = string
-}
