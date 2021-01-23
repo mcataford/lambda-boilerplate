@@ -6,7 +6,7 @@
 #
 appdirs==1.4.4
     # via black
-attrs==20.1.0
+attrs==20.3.0
     # via
     #   jsonschema
     #   pytest
@@ -16,14 +16,14 @@ aws-xray-sdk==2.6.0
     # via moto
 black==20.8b1
     # via -r requirements_dev.in
-boto3==1.14.55
+boto3==1.16.59
     # via
     #   -r requirements_dev.in
     #   aws-sam-translator
     #   moto
 boto==2.49.0
     # via moto
-botocore==1.17.55
+botocore==1.19.59
     # via
     #   aws-xray-sdk
     #   boto3
@@ -50,8 +50,6 @@ decorator==4.4.2
     # via networkx
 docker==4.4.1
     # via moto
-docutils==0.15.2
-    # via botocore
 ecdsa==0.14.1
     # via
     #   moto
@@ -65,7 +63,7 @@ idna==2.10
     #   requests
 iniconfig==1.1.1
     # via pytest
-invoke==1.4.1
+invoke==1.5.0
     # via -r requirements_dev.in
 jinja2==2.11.2
     # via moto
@@ -101,9 +99,9 @@ mypy-extensions==0.4.3
     # via black
 networkx==2.5
     # via cfn-lint
-packaging==16.8
+packaging==20.8
     # via pytest
-pathspec==0.8.0
+pathspec==0.8.1
     # via black
 pluggy==0.13.1
     # via pytest
@@ -133,11 +131,11 @@ python-jose[cryptography]==3.2.0
     # via moto
 pytz==2020.5
     # via moto
-pyyaml==5.3.1
+pyyaml==5.4.1
     # via
     #   cfn-lint
     #   moto
-regex==2020.7.14
+regex==2020.11.13
     # via black
 requests==2.25.1
     # via
@@ -146,9 +144,9 @@ requests==2.25.1
     #   responses
 responses==0.12.1
     # via moto
-rsa==4.5
+rsa==4.7
     # via python-jose
-s3transfer==0.3.3
+s3transfer==0.3.4
     # via boto3
 six==1.15.0
     # via
@@ -160,22 +158,21 @@ six==1.15.0
     #   jsonschema
     #   junit-xml
     #   moto
-    #   packaging
     #   python-dateutil
     #   python-jose
     #   responses
     #   websocket-client
 sshpubkeys==3.1.0
     # via moto
-toml==0.10.1
+toml==0.10.2
     # via
     #   black
     #   pytest
-typed-ast==1.4.1
+typed-ast==1.4.2
     # via black
 typing-extensions==3.7.4.3
     # via black
-urllib3==1.25.10
+urllib3==1.26.2
     # via
     #   botocore
     #   requests
