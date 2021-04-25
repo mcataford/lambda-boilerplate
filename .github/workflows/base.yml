@@ -10,6 +10,9 @@ jobs:
       with:
           python-version: '3.8.2'
     - name: Install dependencies
-      run: CI=1 . script/bootstrap
+      run: |
+        . script/bootstrap
     - name: Lint
-      run: inv lint
+      run: |
+          source $HOME/.poetry/env
+          poetry run inv lint
