@@ -1,6 +1,0 @@
-boto3
-invoke
-black
-pytest
-moto
-pytest-cov
