@@ -10,6 +10,8 @@ jobs:
       with:
           python-version: '3.8.2'
     - name: Install dependencies
-      run: . script/bootstrap
+      run: |
+        . script/bootstrap
+        echo "::set-env name=PATH::$HOME/.poetry/bin:$PATH" 
     - name: Lint
       run: poetry run inv lint
