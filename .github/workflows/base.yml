@@ -12,6 +12,7 @@ jobs:
     - name: Install dependencies
       run: |
         . script/bootstrap
-        echo "::set-env name=PATH::$HOME/.poetry/bin:$PATH" 
     - name: Lint
-      run: poetry run inv lint
+      run: |
+          source $HOME/.poetry/env
+          poetry run inv lint
