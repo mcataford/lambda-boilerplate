@@ -138,38 +138,6 @@ def local_invoke(ctx, function_name, payload):
 # Other invocations #
 ####################
 
-
-@task(name="lock")
-def lock_requirements(ctx):
-    """
-    Builds the pip lockfile
-    """
-    with ctx.cd(BASE_PATH):
-        ctx.run("python -m piptools compile requirements.in", hide="both")
-        ctx.run(
-            "python -m piptools compile requirements_dev.in --output-file requirements_dev.txt",
-            hide="both",
-        )
-
-
-@task(name="update", help=_build_help_dict(["env", "package"]))
-def update_requirements(ctx, env, package):
-    """
-    Updates a package an regenerates the lockfiles.
-    """
-    deps = None
-
-    if env == "prod":
-        deps = "requirements.in"
-    elif env == "dev":
-        deps = "requirements_dev.in"
-    else:
-        raise ValueError("Invalid env")
-
-    with ctx.cd(BASE_PATH):
-        ctx.run(f"python -m piptools compile {deps} --upgrade-package {package}")
-
-
 @task(name="lint", help=_build_help_dict(["fix"]))
 def lint(ctx, fix=False):
     """
@@ -202,13 +170,8 @@ cloud.add_task(cloud_destroy)
 cloud.add_task(cloud_pack)
 cloud.add_task(cloud_push)
 
-project = Collection("requirements")
-project.add_task(lock_requirements)
-project.add_task(update_requirements)
-
 ns.add_collection(local)
 ns.add_collection(cloud)
-ns.add_collection(project)
 
 ns.add_task(lint)
 ns.add_task(test)
