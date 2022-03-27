@@ -29,7 +29,8 @@ resource "aws_lambda_function" "lambda_func" {
     runtime         = "python3.8"
 
     s3_bucket       = var.artifacts_bucket_name
-    s3_key          = var.lambda_archive_name 
+    s3_key          = var.lambda_archive_name
+    source_code_hash = filebase64sha256("../../${var.lambda_archive_name}")
 }
 
 resource "aws_api_gateway_rest_api" "gateway" {

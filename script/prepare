@@ -1,0 +1,30 @@
+#!/usr/bin/bash
+
+VENV=.venv
+TERRAFORM=$VENV/bin/terraform
+LAMBDA_PACKAGE=lambda_function.zip
+
+# Prepare requirements file.
+poetry export -o requirements.txt --without-hashes
+
+# FIXME: Clean up and handle errors gracefully.
+pip install -r requirements.txt --target package/
+zip -r $LAMBDA_PACKAGE src/*
+
+# If there are dependencies to pack, we can pack them as well.
+if [ "$( ls -A package )" ]; then
+    (
+        cd package
+        zip -r ../$LAMBDA_PACKAGE ./
+    )
+fi
+
+# If push is provided, the provides archive it also pushed to S3
+# so it's ready for deployment.
+if [[ $1 == "--push" ]]; then 
+
+    BUCKET_NAME=$($TERRAFORM -chdir=infrastructure/bootstrap output --json | jq .artifacts_bucket_name.value -r)
+
+    aws s3 cp ./$LAMBDA_PACKAGE s3://$BUCKET_NAME
+
+fi

@@ -1,3 +1,5 @@
+.venv
+requirements.txt
 *.sw*
 *.pyc
 *.zip
