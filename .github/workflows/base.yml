@@ -9,6 +9,8 @@ jobs:
     - name: Set up dependencies
       run: |
         . script/bootstrap
+      env:
+        CI: 1
     - name: Lint
       run: |
         PROJECT=app make terraform-lint
