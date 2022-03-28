@@ -33,15 +33,17 @@ TFLINT=$VENV/bin/tflint
     fi
 
     # Ensure that Poetry is set up.
-    if [[ ! $(poetry -V | grep $POETRY_VERSION) ]]; then
+    if [[ $CI == 1 ]]; then
+        return
+    elif [[ ! $(poetry -V | grep $POETRY_VERSION) ]]; then
         curl -sSL https://install.python-poetry.org | python3 -
-        ls -la
-        ls $HOME -la
         source $HOME/.poetry/env
     else
         echo "Poetry ($POETRY_VERSION) already installed!"
     fi
-
-    # Install deps.
-    poetry install
+    
+    if [[ ! $(poetry -V | grep $POETRY_VERSION) ]]; then
+        # Install deps.
+        poetry install
+    fi
 )
