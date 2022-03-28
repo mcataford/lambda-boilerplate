@@ -1,28 +1,45 @@
+#!/usr/bin/bash
+
 set -e
 
 VENV=.venv
 TERRAFORM_VERSION="1.1.7"
 POETRY_VERSION="1.1.13"
 MACHINE_TYPE="linux"
+TFLINT_INSTALL_PATH=$VENV/bin/tflint
 
-# Ensure that Terraform exists and has the right version.
-if [[ ! $($VENV/bin/terraform version --json | jq .terraform_version -r) == $TERRAFORM_VERSION ]]; then
-    mkdir --parents $VENV/bin
-    curl -L -o terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_${MACHINE_TYPE}_amd64.zip"
-    unzip terraform.zip -d .
-    mv terraform $VENV/bin/
-    rm terraform.zip
-else
-    echo "Terraform ($TERRAFORM_VERSION) already installed!"
-fi
+# Local executables
+TERRAFORM=$VENV/bin/terraform
+TFLINT=$VENV/bin/tflint
+(
+    # Ensure that Terraform exists and has the right version.
+    if [[ !  $($TERRAFORM version --json | jq .terraform_version -r) == $TERRAFORM_VERSION ]]; then
+        mkdir --parents $VENV/bin
+        curl -L -o terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_${MACHINE_TYPE}_amd64.zip"
+        unzip terraform.zip -d .
+        mv terraform $VENV/bin/
+        rm terraform.zip
+    else
+        echo "Terraform ($TERRAFORM_VERSION) already installed!"
+    fi
 
-# Ensure that Poetry is set up.
-if [[ ! $(poetry -V | grep $POETRY_VERSION) ]]; then
-    curl -sSL https://install.python-poetry.org | python3 -
-    source $HOME/.poetry/env
-else
-    echo "Poetry ($POETRY_VERSION) already installed!"
-fi
+    # Set up tflint.
+    if [[ ! -d $TFLINT ]]; then
+        curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | TFLINT_INSTALL_PATH=$TFLINT_INSTALL_PATH bash
+        sudo chown $(whoami) $TFLINT_INSTALL_PATH
+        $TFLINT_INSTALL_PATH/tflint --init
+    else
+        echo "tflint ($($TFLINT/tflint --version)) already installed!"
+    fi
 
-# Install deps.
-poetry install
+    # Ensure that Poetry is set up.
+    if [[ ! $(poetry -V | grep $POETRY_VERSION) ]]; then
+        curl -sSL https://install.python-poetry.org | python3 -
+        source $HOME/.poetry/env
+    else
+        echo "Poetry ($POETRY_VERSION) already installed!"
+    fi
+
+    # Install deps.
+    poetry install
+)

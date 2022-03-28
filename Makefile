@@ -1,6 +1,11 @@
 VENV=.venv
 TERRAFORM=${VENV}/bin/terraform
+TFLINT=${VENV}/bin/tflint/tflint
 LAMBDA_PACKAGE=lambda_function.zip
+
+##################
+# Cloud recipes. #
+##################
 
 .PHONY: deploy
 deploy:
@@ -25,6 +30,10 @@ prepare-and-upload:
 ##############################
 # Local development recipes. #
 ##############################
+.PHONY: terraform-format
+terraform-lint:
+	${TERRAFORM} -chdir=infrastructure/${PROJECT} fmt -write=true -list=true
+	${TFLINT} --loglevel=info infrastructure/${PROJECT} --var-file infrastructure/${PROJECT}/variables.tfvars --var-file infrastructure/common.tfvars
 
 .PHONY: start
 start:

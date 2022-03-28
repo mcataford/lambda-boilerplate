@@ -2,17 +2,14 @@ name: Lambda Boilerplate
 
 on: [push]
 jobs:
-  lint-and-validate:
+  terraform-lint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-          python-version: '3.8.2'
-    - name: Install dependencies
+    - name: Set up dependencies
       run: |
         . script/bootstrap
     - name: Lint
       run: |
-          source $HOME/.poetry/env
-          poetry run inv lint
+        PROJECT=app make terraform-lint
+        PROJECT=bootstrap make terraform-lint
