@@ -1,3 +1,4 @@
+*.venv
 *.sw*
 *.pyc
 *.zip
@@ -5,4 +6,4 @@
 *.terraform*
 *tfstate*
 *tfvars
-
+.coverage
