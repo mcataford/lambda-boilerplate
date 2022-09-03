@@ -44,6 +44,7 @@ def cloud_plan(ctx, project):
     Builds the Terraform plan for the given project.
     """
     with ctx.cd(PROJECT_PATHS[project]):
+        ctx.run("terraform init")
         ctx.run(f"terraform plan --var-file {VARIABLES_PATH}")
 
 
@@ -53,6 +54,7 @@ def cloud_apply(ctx, project):
     Applies infrastructure changes to the given project.
     """
     with ctx.cd(PROJECT_PATHS[project]):
+        ctx.run("terraform init")
         ctx.run("terraform taint --allow-missing aws_lambda_function.apgnd_lambda_func")
         ctx.run("terraform taint --allow-missing aws_lambda_permission.apigw")
         ctx.run(f"terraform apply --var-file {VARIABLES_PATH}")
@@ -64,6 +66,7 @@ def cloud_destroy(ctx, project):
     Destroys resources associated with the given project.
     """
     with ctx.cd(PROJECT_PATHS[project]):
+        ctx.run("terraform init")
         ctx.run(f"terraform destroy --var-file {VARIABLES_PATH}")
 
 
@@ -90,8 +93,9 @@ def cloud_push(ctx, archive):
     with ctx.cd(_compose_path(PROJECT_PATHS["bootstrap"])):
         out = ctx.run("terraform output", hide="out").stdout
         artifacts_bucket_match = re.match(
-            "artifacts_bucket_name = (?P<bucket_name>[0-9a-zA-Z\-]+)\n", out
+            'artifacts_bucket_name = "(?P<bucket_name>[0-9a-zA-Z-_]+)"\n?', out
         )
+
         artifacts_bucket = artifacts_bucket_match.group("bucket_name")
 
     with ctx.cd(BASE_PATH):
