@@ -1,11 +1,11 @@
 variable "aws_region" {
-    type        = string
+  type = string
 }
 
 variable "artifacts_bucket_name" {
-    type        = string
+  type = string
 }
 
 variable "lambda_archive_name" {
-    type        = string
+  type = string
 }

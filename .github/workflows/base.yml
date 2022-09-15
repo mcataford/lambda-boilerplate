@@ -2,14 +2,11 @@ name: Lambda Boilerplate
 
 on: [push]
 jobs:
-  lint-and-validate:
+  terraform-lint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-          python-version: '3.8.2'
-    - name: Install dependencies
-      run: CI=1 . script/bootstrap
-    - name: Lint
-      run: inv lint
+    - uses: hashicorp/setup-terraform@v2
+    - run: |
+        . script/bootstrap
+        . script/terraform-lint
