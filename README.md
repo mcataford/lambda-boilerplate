@@ -9,23 +9,20 @@ AWS Lambdas are fun, but often the amount of boilerplate involved in getting a p
 
 ## Local development
 
-To get started, hit the bootstrap script with `. script/bootstrap`. This will set up a Python 3.8 virtualenv set up with some basic tools that will make your life easier.
-
 The base Lambda handler is at `src/base.py` and all the Terraform configurations are in `infrastructure`.
 
 [Read more about Sceptre](https://sceptre.cloudreach.com/latest/index.html://www.terraform.io/docs/index.html)
 
 [Read more about AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python.html)
 
-### Invocations
+### Tooling
 
-This template uses PyInvoke, all commands are of the format `inv <command> <parameters>`.
-
-Use `inv --list` for the full list of commands.
+All the tooling is implemented using the [One Script to Rule Them
+All](https://github.com/github/scripts-to-rule-them-all) paradigm and can be found under `script`.
 
 ## Deployment
 
-Deployment is in three steps: on first setup, you will need to make sure that your `bootstrap` environment is ready via `inv cloud.apply bootstrap`. Then, you should upload your lambdas' source with `inv cloud.pack` and `inv cloud.push`. Finally, you can deploy your application resources with `inv cloud.deploy app`.
+Deployment is in three steps: on first setup, you will need to make sure that your `bootstrap` environment is ready via `PROJECT=bootstrap . script/apply`. Then, you should prepare your source code package (dependent on the language and framework you're using, you have to supply this bit!) and `ARCHIVE=<path-to-zip> . script/push`. Finally, you can deploy your application resources with `PROJECT=app . script/apply`.
 
 ## Contributing
 
