@@ -9,9 +9,9 @@ AWS Lambdas are fun, but often the amount of boilerplate involved in getting a p
 
 ## Local development
 
-The base Lambda handler is at `src/base.py` and all the Terraform configurations are in `infrastructure`.
+The base Lambda handler is at `src/base.py` and all the Terraform configuration files are in `infrastructure`.
 
-[Read more about Sceptre](https://sceptre.cloudreach.com/latest/index.html://www.terraform.io/docs/index.html)
+[Read more about Terraform](https://www.terraform.io/docs/index.html)
 
 [Read more about AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python.html)
 
@@ -22,7 +22,16 @@ All](https://github.com/github/scripts-to-rule-them-all) paradigm and can be fou
 
 ## Deployment
 
-Deployment is in three steps: on first setup, you will need to make sure that your `bootstrap` environment is ready via `PROJECT=bootstrap . script/apply`. Then, you should prepare your source code package (dependent on the language and framework you're using, you have to supply this bit!) and `ARCHIVE=<path-to-zip> . script/push`. Finally, you can deploy your application resources with `PROJECT=app . script/apply`.
+Provided your runtime source code is prepackages and ready to go, you can simply `ARCHIVE=<path-to-function-zip> . script/deploy` to deploy your function in seconds!
+
+By default, the resources are identified with an environment name `dev-$USER`, but you can change this in staging /
+production deployments by specifying the `ENV_NAME` environment variable.
+
+Individual parts of the application (i.e. the bootstrap resources or the application itself) can be deployed separately
+using `PROJECT=<bootstrap|app> script/apply`.
+
+Prepackaging the source code depends on what language is used as a runtime, more details can be found in [AWS Lambda
+documentation](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html).
 
 ## Contributing
 
