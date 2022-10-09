@@ -9,9 +9,9 @@
     source $(dirname $0)/../.config
 
     PROJECT_ROOT=$(realpath $BOOTSTRAP_ROOT/infrastructure/$PROJECT)
-
+    DEFAULT_ENVNAME="dev-$USER"
     cd $PROJECT_ROOT
 
     terraform init
-    terraform plan --var-file $VARIABLES_PATH
+    terraform plan --var-file $VARIABLES_PATH -var="env_name=${ENV_NAME:-$DEFAULT_ENVNAME}" -var="commit_sha=$(git log --pretty=format:'%H' -n 1)"
 )

@@ -1,18 +1,5 @@
-terraform {
-  required_version = ">=1.0"
-
-  required_providers {
-    aws = "4.34.0"
-  }
-}
-
-provider "aws" {
-  profile = "default"
-  region  = var.aws_region
-}
-
 resource "aws_iam_role" "lambda_role" {
-  name               = "lambda_role"
+  name               = "${local.service_longname}_lambda-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -28,21 +15,29 @@ resource "aws_iam_role" "lambda_role" {
   ]
 }
 EOF
+
+  tags = local.common_tags
+
 }
 
 resource "aws_lambda_function" "lambda_func" {
-  function_name = "boilerplate_function"
+  function_name = "${local.service_longname}_function"
   role          = aws_iam_role.lambda_role.arn
   handler       = "src.base.handler"
   runtime       = "python3.8"
 
   s3_bucket = var.artifacts_bucket_name
   s3_key    = var.lambda_archive_name
+
+  tags = local.common_tags
 }
 
 resource "aws_api_gateway_rest_api" "gateway" {
-  name        = "boilerplate"
+  name        = "${local.service_longname}_gateway"
   description = "Lambda Boilerplate"
+
+  tags = local.common_tags
+
 }
 
 resource "aws_api_gateway_resource" "lambda_proxy" {
@@ -66,6 +61,7 @@ resource "aws_api_gateway_integration" "lambda" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.lambda_func.invoke_arn
+
 }
 
 resource "aws_api_gateway_deployment" "lambda" {
@@ -75,6 +71,7 @@ resource "aws_api_gateway_deployment" "lambda" {
 
   rest_api_id = aws_api_gateway_rest_api.gateway.id
   stage_name  = "test"
+
 }
 
 resource "aws_lambda_permission" "apigw" {
@@ -83,6 +80,7 @@ resource "aws_lambda_permission" "apigw" {
   function_name = aws_lambda_function.lambda_func.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.gateway.execution_arn}/*/*"
+
 }
 
 output "base_url" {
